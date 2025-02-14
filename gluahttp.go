@@ -12,16 +12,16 @@ import (
 )
 
 type httpModule struct {
-	do func(req *http.Request) (*http.Response, error)
+	do func(c *http.Client, req *http.Request) (*http.Response, error)
 }
 
 type empty struct{}
 
 func NewHttpModule(client *http.Client) *httpModule {
-	return NewHttpModuleWithDo(client.Do)
+	return NewHttpModuleWithDo((*http.Client).Do)
 }
 
-func NewHttpModuleWithDo(do func(req *http.Request) (*http.Response, error)) *httpModule {
+func NewHttpModuleWithDo(do func(c *http.Client, req *http.Request) (*http.Response, error)) *httpModule {
 	return &httpModule{
 		do: do,
 	}
@@ -215,7 +215,7 @@ func (h *httpModule) doRequest(L *lua.LState, method string, url string, options
 		}
 	}
 
-	res, err := h.do(req)
+	res, err := h.do(&http.Client{}, req)
 	if err != nil {
 		return nil, err
 	}
