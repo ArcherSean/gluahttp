@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"net/http/cookiejar"
 	"strings"
 	"testing"
 	"time"
@@ -419,12 +418,7 @@ func evalLua(t *testing.T, script string) error {
 	L := lua.NewState()
 	defer L.Close()
 
-	cookieJar, _ := cookiejar.New(nil)
-
-	L.PreloadModule("http", NewHttpModule(&http.Client{
-		Jar: cookieJar,
-	},
-	).Loader)
+	L.PreloadModule("http", NewHttpModule().Loader)
 
 	L.SetGlobal("assert_equal", L.NewFunction(func(L *lua.LState) int {
 		expected := L.Get(1)

@@ -7,6 +7,7 @@ import (
 	"github.com/yuin/gopher-lua"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -17,7 +18,7 @@ type httpModule struct {
 
 type empty struct{}
 
-func NewHttpModule(client *http.Client) *httpModule {
+func NewHttpModule() *httpModule {
 	return NewHttpModuleWithDo((*http.Client).Do)
 }
 
@@ -139,8 +140,8 @@ func (h *httpModule) requestBatch(L *lua.LState) int {
 	}
 }
 
-func (h *httpModule) doRequest(L *lua.LState, method string, url string, options *lua.LTable) (*lua.LUserData, error) {
-	req, err := http.NewRequest(strings.ToUpper(method), url, nil)
+func (h *httpModule) doRequest(L *lua.LState, method string, reqUrl string, options *lua.LTable) (*lua.LUserData, error) {
+	req, err := http.NewRequest(strings.ToUpper(method), reqUrl, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -148,6 +149,8 @@ func (h *httpModule) doRequest(L *lua.LState, method string, url string, options
 	if ctx := L.Context(); ctx != nil {
 		req = req.WithContext(ctx)
 	}
+
+	client := http.Client{}
 
 	if options != nil {
 		if reqCookies, ok := options.RawGet(lua.LString("cookies")).(*lua.LTable); ok {
@@ -213,9 +216,24 @@ func (h *httpModule) doRequest(L *lua.LState, method string, url string, options
 				req.Header.Set(key.String(), value.String())
 			})
 		}
+
+		followRedirect := options.RawGet(lua.LString("followRedirect"))
+		if followRedirect != lua.LNil && followRedirect.String() == "false" {
+			client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+				return http.ErrUseLastResponse
+			}
+		}
+
+		proxyAddr := options.RawGet(lua.LString("proxyAddr"))
+		if proxyAddr != lua.LNil {
+			proxyURL, _ := url.Parse(proxyAddr.String())
+			client.Transport = &http.Transport{
+				Proxy: http.ProxyURL(proxyURL),
+			}
+		}
 	}
 
-	res, err := h.do(&http.Client{}, req)
+	res, err := h.do(&client, req)
 	if err != nil {
 		return nil, err
 	}
