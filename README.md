@@ -7,14 +7,14 @@ gluahttp provides an easy way to make HTTP requests from within [GopherLua](http
 ## Installation
 
 ```
-go get github.com/cjoudrey/gluahttp
+go get github.com/archersean/gluahttp
 ```
 
 ## Usage
 
 ```go
 import "github.com/yuin/gopher-lua"
-import "github.com/cjoudrey/gluahttp"
+import "github.com/archersean/gluahttp"
 
 func main() {
     L := lua.NewState()
@@ -70,6 +70,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -93,6 +95,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -116,6 +120,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -141,6 +147,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -166,6 +174,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -191,6 +201,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
@@ -217,6 +229,8 @@ func main() {
 | headers | Table  | Additional headers to send with the request |
 | timeout | Number/String | Request timeout. Number of seconds or String such as "1h" |
 | auth    | Table  | Username and password for HTTP basic auth. Table keys are *user* for username, *pass* for passwod. `auth={user="user", pass="pass"}` |
+| followRedirect  | Bool | Set whether to follow redirect |
+| proxyAddr | String | Set the address of the forward proxy |
 
 **Returns**
 
